@@ -42,11 +42,6 @@ public class LevelSystem : MonoBehaviour
     {
         UpdateXpUI();
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            GainExperienceFlatRate(20);
-        }
-
         if (currentXP > requiredXP)
         {
             LevelUp();
@@ -87,7 +82,9 @@ public class LevelSystem : MonoBehaviour
         frontXpBar.fillAmount = 0; 
         backXpBar.fillAmount = 0;
 
+        GameObject.FindGameObjectWithTag("UI").GetComponent<UpgradeMenu>().Pause();
         level++;
+        //GameObject.FindGameObjectWithTag("UI").GetComponent<UpgradeMenu>().Resume();
 
         requiredXP = CalculateRequiredXP();
     }
