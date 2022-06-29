@@ -15,7 +15,7 @@ public class BulletBehavior : MonoBehaviour
 
         if (collision.gameObject.TryGetComponent<BasicEnemyAI>(out BasicEnemyAI enemy))
         {
-            enemy.TakeDamage(GameObject.FindGameObjectWithTag("Player").GetComponent<Shooting>().damage);
+            enemy.TakeDamage(GameObject.FindGameObjectWithTag("Player").GetComponent<IShooting>().damage);
         }
         
         Destroy(gameObject);

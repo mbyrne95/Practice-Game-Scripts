@@ -11,7 +11,7 @@ public class AttackSpeedBuff : PowerupEffect
 
     public override void Apply(GameObject target)
     {
-        float currentAS = target.GetComponent<Shooting>().fireRate;
-        target.GetComponent<Shooting>().fireRate = currentAS - (currentAS * attackSpeedPercent);
+        float currentAS = target.GetComponent<IShooting>().fireRate;
+        target.GetComponent<IShooting>().fireRate = currentAS - (currentAS * attackSpeedPercent);
     }
 }

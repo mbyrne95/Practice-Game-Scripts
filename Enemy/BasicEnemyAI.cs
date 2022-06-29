@@ -7,7 +7,7 @@ public class BasicEnemyAI : MonoBehaviour
     public GameObject xp;
 
     public float speed;
-    public int health, maxHealth = 10;
+    public float health, maxHealth = 10;
 
     public float attackRadius;
     public bool shouldRotate;
@@ -90,7 +90,7 @@ public class BasicEnemyAI : MonoBehaviour
         targetHealth = targetHealth - 1;
     }
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
 

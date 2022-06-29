@@ -14,7 +14,8 @@ public class Dash : Ability
         Vector2 moveDirection = movement.moveDirection;
             //Rigidbody2D rb = parent.GetComponent<Rigidbody2D>();
         movement.moveSpeedActive = movement.moveSpeedActive * dashVelocity;
-        
+
+        parent.GetComponent<Vayne_Shooting>().StartCoroutine(parent.GetComponent<Vayne_Shooting>().DashModifier());
     }
 
     public override void BeginCooldown(GameObject parent)
