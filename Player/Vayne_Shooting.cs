@@ -9,6 +9,8 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
     
     public float bulletSpeed = 20f;
 
+    public float knockBackStrength;
+
     [SerializeField]
     private float fireRate;
     [SerializeField]
@@ -17,6 +19,9 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
     private float currentDamage;
 
     private float lastShootTime = 0;
+
+    public bool tumbleModifierBool = false;
+    public bool condemnModifierBool = false;
 
     float IShooting.fireRate { get => fireRate; set => fireRate = value; }
     float IShooting.damage { get => damage; set => damage = value; }
@@ -34,9 +39,16 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
 
     public void Shoot()
     {
-
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        bullet.GetComponent<BulletBehavior>().damage = damage;
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+        //check if the next auto should be modified by tumble damage modifier
+        if (tumbleModifierBool)
+        {
+            bullet.GetComponent<BulletBehavior>().damage = (float)1.6 * damage;
+            tumbleModifierBool = false;
+        }
 
         rb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
 
@@ -44,6 +56,7 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
 
     }
 
+    /*
     public IEnumerator DashModifier()
     {
         currentDamage = damage;
@@ -51,4 +64,5 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
         yield return new WaitForSeconds(1);
         damage = currentDamage;
     }
+    */
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class Dash : Ability
+public class Tumble : Ability
 {
     public float dashVelocity;
     public override void Activate(GameObject parent)
@@ -15,7 +15,7 @@ public class Dash : Ability
             //Rigidbody2D rb = parent.GetComponent<Rigidbody2D>();
         movement.moveSpeedActive = movement.moveSpeedActive * dashVelocity;
 
-        parent.GetComponent<Vayne_Shooting>().StartCoroutine(parent.GetComponent<Vayne_Shooting>().DashModifier());
+        parent.GetComponent<Vayne_Shooting>().tumbleModifierBool = true;
     }
 
     public override void BeginCooldown(GameObject parent)
