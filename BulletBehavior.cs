@@ -5,6 +5,8 @@ using UnityEngine;
 public class BulletBehavior : MonoBehaviour
 {
     //public GameObject hitEffect;
+    public float damage;
+    private float condemnStrength; 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -15,9 +17,21 @@ public class BulletBehavior : MonoBehaviour
 
         if (collision.gameObject.TryGetComponent<BasicEnemyAI>(out BasicEnemyAI enemy))
         {
-            enemy.TakeDamage(GameObject.FindGameObjectWithTag("Player").GetComponent<IShooting>().damage);
-        }
-        
+            enemy.TakeDamage(damage);
+            
+            if (GameObject.FindGameObjectWithTag("Player").GetComponent<Vayne_Shooting>() != null)
+            {
+
+                condemnStrength = GameObject.FindGameObjectWithTag("Player").GetComponent<Vayne_Shooting>().knockBackStrength;
+
+                if (GameObject.FindGameObjectWithTag("Player").GetComponent<Vayne_Shooting>().condemnModifierBool)
+                {
+                    enemy.rb.AddForce((collision.transform.position - transform.position) * condemnStrength, ForceMode2D.Force);
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<Vayne_Shooting>().condemnModifierBool = false;
+                }
+            }
+            
+        }       
         Destroy(gameObject);
     }
 }

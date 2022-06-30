@@ -16,10 +16,10 @@ public class BasicEnemyAI : MonoBehaviour
     public GameObject player;
 
     private Transform target;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator anim;
     private Vector2 movement;
-    private Vector3 dir;
+    public Vector3 dir;
 
     private Collider2D col;
 
