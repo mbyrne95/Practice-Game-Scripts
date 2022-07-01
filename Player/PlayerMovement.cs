@@ -7,14 +7,16 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
     public float moveSpeedBase;
+    //public bool isCharacterFiring = false;
 
     public Vector2 moveDirection;
 
     public float moveSpeedActive;
 
-    /*
-    void Start() { }
-    */
+    void Start()
+    {
+        
+    }
 
     // Update is called once per frame
     void Update()

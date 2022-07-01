@@ -9,7 +9,7 @@ public class Condemn : Ability
 
     public override void Activate(GameObject parent)
     {
-        parent.GetComponent<Vayne_Shooting>().condemnModifierBool = true;
+        parent.GetComponent<Vayne_Shooting>().Condemn();
     }
 
     public override void BeginCooldown(GameObject parent)

@@ -6,22 +6,21 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
 {
     public Transform firePoint;
     public GameObject bulletPrefab;
+    public GameObject condemnPrefab;
     
     public float bulletSpeed = 20f;
-
-    public float knockBackStrength;
 
     [SerializeField]
     private float fireRate;
     [SerializeField]
     private float damage;
 
-    private float currentDamage;
+    public float tumbleMultiplier;
+    public float condemnDamage;
 
     private float lastShootTime = 0;
 
     public bool tumbleModifierBool = false;
-    public bool condemnModifierBool = false;
 
     float IShooting.fireRate { get => fireRate; set => fireRate = value; }
     float IShooting.damage { get => damage; set => damage = value; }
@@ -32,13 +31,16 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
     {
         if (Input.GetButton("Fire1") && Time.time > lastShootTime + fireRate)
         {
+            //GetComponentInParent<PlayerMovement>().isCharacterFiring = true;
             Shoot();
             lastShootTime = Time.time;
         }
+        //GetComponentInParent<PlayerMovement>().isCharacterFiring = false;
     }
 
     public void Shoot()
     {
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Default"));
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.GetComponent<BulletBehavior>().damage = damage;
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
@@ -46,23 +48,23 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
         //check if the next auto should be modified by tumble damage modifier
         if (tumbleModifierBool)
         {
-            bullet.GetComponent<BulletBehavior>().damage = (float)1.6 * damage;
+            bullet.GetComponent<BulletBehavior>().damage = tumbleMultiplier * damage;
             tumbleModifierBool = false;
         }
 
         rb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
 
         lastShootTime = Time.time;
-
     }
 
-    /*
-    public IEnumerator DashModifier()
+    
+    public void Condemn()
     {
-        currentDamage = damage;
-        damage = (float)1.6 * damage;
-        yield return new WaitForSeconds(1);
-        damage = currentDamage;
+        GameObject condemn = Instantiate(condemnPrefab, firePoint.position, firePoint.rotation);
+        //condemn.GetComponent<CondemnBehavior>().damage = condemnDamage;
+        Rigidbody2D rb = condemn.GetComponent<Rigidbody2D>();
+
+        rb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
     }
-    */
+
 }

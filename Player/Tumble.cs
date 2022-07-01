@@ -10,8 +10,8 @@ public class Tumble : Ability
     {
         PlayerMovement movement = parent.GetComponent<PlayerMovement>();
 
-        Transform currentTransform = parent.transform;
-        Vector2 moveDirection = movement.moveDirection;
+        //Transform currentTransform = parent.transform;
+        //Vector2 moveDirection = movement.moveDirection;
             //Rigidbody2D rb = parent.GetComponent<Rigidbody2D>();
         movement.moveSpeedActive = movement.moveSpeedActive * dashVelocity;
 
