@@ -9,18 +9,22 @@ public class Tumble : Ability
     public override void Activate(GameObject parent)
     {
         PlayerMovement movement = parent.GetComponent<PlayerMovement>();
+        //movement.state = PlayerMovement.movementState.misc;
+        movement.tumbleModifierBool = true;
+        parent.GetComponent<Vayne_Shooting>().tumbleModifierShoot = true;
 
-        //Transform currentTransform = parent.transform;
-        //Vector2 moveDirection = movement.moveDirection;
-            //Rigidbody2D rb = parent.GetComponent<Rigidbody2D>();
-        movement.moveSpeedActive = movement.moveSpeedActive * dashVelocity;
+        //movement.moveSpeedActive = movement.moveSpeedBase * dashVelocity;
 
-        parent.GetComponent<Vayne_Shooting>().tumbleModifierBool = true;
+        //parent.GetComponent<Vayne_Shooting>().tumbleModifierBool = true;
     }
 
     public override void BeginCooldown(GameObject parent)
     {
         PlayerMovement movement = parent.GetComponent<PlayerMovement>();
-        movement.moveSpeedActive = movement.moveSpeedBase;
+        movement.tumbleModifierBool = false;
+        //parent.GetComponent<Vayne_Shooting>().tumbleModifierShoot = false;
+
+        //movement.state = PlayerMovement.movementState.normal;
+        //movement.moveSpeedActive = movement.moveSpeedBase;
     }
 }

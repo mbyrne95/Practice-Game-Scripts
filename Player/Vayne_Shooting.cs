@@ -20,36 +20,47 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
 
     private float lastShootTime = 0;
 
-    public bool tumbleModifierBool = false;
+    [HideInInspector]
+    public bool tumbleModifierShoot = false;
 
     float IShooting.fireRate { get => fireRate; set => fireRate = value; }
     float IShooting.damage { get => damage; set => damage = value; }
 
     // Update is called once per frame
 
+    void Start()
+    {
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Default"));
+    }
+
+
     public void Update()
     {
         if (Input.GetButton("Fire1") && Time.time > lastShootTime + fireRate)
         {
-            //GetComponentInParent<PlayerMovement>().isCharacterFiring = true;
             Shoot();
             lastShootTime = Time.time;
+            //GetComponentInParent<PlayerMovement>().state = PlayerMovement.movementState.shooting;
         }
-        //GetComponentInParent<PlayerMovement>().isCharacterFiring = false;
+        /*
+        else
+        {
+            GetComponentInParent<PlayerMovement>().state = PlayerMovement.movementState.normal;
+        }
+        */
     }
 
     public void Shoot()
     {
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Default"));
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         bullet.GetComponent<BulletBehavior>().damage = damage;
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
         //check if the next auto should be modified by tumble damage modifier
-        if (tumbleModifierBool)
+        if (tumbleModifierShoot)
         {
-            bullet.GetComponent<BulletBehavior>().damage = tumbleMultiplier * damage;
-            tumbleModifierBool = false;
+            bullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
+            tumbleModifierShoot = false;
         }
 
         rb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
