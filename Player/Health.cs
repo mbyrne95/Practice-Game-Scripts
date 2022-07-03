@@ -67,11 +67,11 @@ public class Health : MonoBehaviour
     private IEnumerator BecomeTemporarilyInvincible()
     {
         isInvincible = true;
-        Physics2D.IgnoreLayerCollision(GameObject.FindGameObjectWithTag("Enemy").layer, gameObject.layer);
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), gameObject.layer);
 
         yield return new WaitForSeconds(iFrames);
 
-        Physics2D.IgnoreLayerCollision(GameObject.FindGameObjectWithTag("Enemy").layer, gameObject.layer, false);
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), gameObject.layer, false);
         isInvincible = false;
     }
 }

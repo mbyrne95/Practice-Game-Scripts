@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [CreateAssetMenu(menuName = "Powerups/AttackspeedBuff")]
 public class AttackSpeedBuff : PowerupEffect
 {

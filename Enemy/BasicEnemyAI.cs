@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class BasicEnemyAI : MonoBehaviour
+public class BasicEnemyAI : MonoBehaviour, IEnemy 
 {
     public GameObject xp;
 
@@ -13,17 +14,26 @@ public class BasicEnemyAI : MonoBehaviour
     public bool shouldRotate;
 
     public LayerMask whatIsPlayer;
+
+    [HideInInspector]
     public GameObject player;
 
     private Transform target;
+    [HideInInspector]
     public Rigidbody2D rb;
     private Animator anim;
     private Vector2 movement;
+    [HideInInspector]
     public Vector3 dir;
 
     private Collider2D col;
 
-    private bool isInAttackRange;
+    //private bool isInAttackRange;
+
+    private List<Debuff> debuffs = new List<Debuff>();
+
+    [SerializeField]
+    private int silverBoltStacks = 0;
 
     //private Vector3 startingPosition;
 
@@ -41,6 +51,7 @@ public class BasicEnemyAI : MonoBehaviour
     void Update()
     {
         //isInAttackRange = Physics2D.OverlapCircle(transform.position, attackRadius, whatIsPlayer);
+
 
         dir = target.position - transform.position;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -67,6 +78,9 @@ public class BasicEnemyAI : MonoBehaviour
             Physics2D.IgnoreCollision(xp.GetComponent<Collider2D>(), col);
         }
 
+        HandleDebuffs();
+
+
         MoveCharacter(movement);
         /*
         if (!isInAttackRange)
@@ -85,7 +99,7 @@ public class BasicEnemyAI : MonoBehaviour
         rb.MovePosition((Vector2)transform.position + (dir * speed * Time.deltaTime));
     }
 
-    private void ContactDamage(int targetHealth)
+    public void ContactDamage(int targetHealth)
     {
         targetHealth = targetHealth - 1;
     }
@@ -103,4 +117,32 @@ public class BasicEnemyAI : MonoBehaviour
         }
     }
 
+    public void AddDebuff(Debuff debuff)
+    {
+        debuffs.Add(debuff);
+    }
+
+    private void HandleDebuffs()
+    {
+        Debug.Log(silverBoltStacks);
+
+        var tempList = debuffs;
+        //int count = 0;
+
+        foreach (Debuff item in debuffs.Reverse<Debuff>())
+        {
+            if (item.GetType() == typeof(SilverBoltDebuff))
+            {
+                silverBoltStacks++;
+                debuffs.Remove(item);
+            }
+            //count++;
+        }
+
+        if (silverBoltStacks == 3)
+        {                        
+            TakeDamage(maxHealth * (float)0.12);
+            silverBoltStacks = 0;                      
+        }
+    }
 }

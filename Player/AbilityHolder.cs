@@ -8,6 +8,9 @@ public class AbilityHolder : MonoBehaviour
     float cooldownTime;
     float activeTime;
 
+    [HideInInspector]
+    public float cooldownReduction = 0;
+
     enum AbilityState
     {
         ready,
@@ -40,7 +43,7 @@ public class AbilityHolder : MonoBehaviour
                 {
                     ability.BeginCooldown(gameObject);
                     state = AbilityState.cooldown;
-                    cooldownTime = ability.cooldownTime;
+                    cooldownTime = (1 - cooldownReduction) * ability.cooldownTime;
                 }
             break;
 

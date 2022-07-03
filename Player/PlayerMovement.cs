@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        
+        //check if the player is firing/dashing. Dashing always takes precedence, followed by firing.
         if(Input.GetButton("Fire1") && tumbleModifierBool)
         {
             state = movementState.tumbling;
