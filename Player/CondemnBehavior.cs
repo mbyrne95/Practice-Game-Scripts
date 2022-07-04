@@ -11,11 +11,11 @@ public class CondemnBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent<BasicEnemyAI>(out BasicEnemyAI enemy))
+        if (collision.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy))
         {
             damage = GameObject.FindGameObjectWithTag("Player").GetComponent<Vayne_Shooting>().condemnDamage;
             enemy.TakeDamage(damage);
-            enemy.rb.AddForce((collision.transform.position - transform.position) * condemnStrength, ForceMode2D.Force);
+            collision.gameObject.GetComponent<Rigidbody2D>().AddForce((collision.transform.position - transform.position) * condemnStrength, ForceMode2D.Force);
         }
         Destroy(gameObject);
     }

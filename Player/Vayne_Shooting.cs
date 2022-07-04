@@ -34,7 +34,7 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
     {
         //ignore all collision between default layer and player layer - all friendly projectiles should be in default
         //xp and pickups should additionally be in player
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Default"));
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("PlayerBullets"));
     }
 
 

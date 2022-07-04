@@ -68,9 +68,12 @@ public class Health : MonoBehaviour
     {
         isInvincible = true;
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), gameObject.layer);
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("EnemyBullets"), gameObject.layer);
+
 
         yield return new WaitForSeconds(iFrames);
 
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("EnemyBullets"), gameObject.layer, false);
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), gameObject.layer, false);
         isInvincible = false;
     }

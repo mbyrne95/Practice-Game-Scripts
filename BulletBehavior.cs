@@ -12,14 +12,14 @@ public class BulletBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent<BasicEnemyAI>(out BasicEnemyAI enemy))
+        if (collision.gameObject.TryGetComponent<IEnemy>(out IEnemy enemy))
         {
             if (isSilverBolt)
             {
                 enemy.AddDebuff(new SilverBoltDebuff(enemy));
             }
             enemy.TakeDamage(damage);
-        }       
+        }               
         Destroy(gameObject);
     }
 }
