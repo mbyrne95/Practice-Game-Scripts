@@ -6,6 +6,8 @@ public class PlayerAimWeapon : MonoBehaviour
 {
 
     private Transform aimTransform;
+    [HideInInspector]
+    public Vector3 aimDirection;
 
     private void Awake()
     {
@@ -28,7 +30,7 @@ public class PlayerAimWeapon : MonoBehaviour
     private void HandleAiming()
     {
         Vector3 mousePosition = GetMouseWorldPosition(Input.mousePosition, Camera.main);
-        Vector3 aimDirection = (mousePosition - transform.position).normalized;
+        aimDirection = (mousePosition - transform.position).normalized;
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         aimTransform.eulerAngles = new Vector3(0, 0, angle);
     }

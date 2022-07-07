@@ -127,7 +127,7 @@ public class BasicEnemyAI : MonoBehaviour, IEnemy
     {
         Debug.Log(silverBoltStacks);
 
-        var tempList = debuffs;
+        //var tempList = debuffs;
         //int count = 0;
 
         foreach (Debuff item in debuffs.Reverse<Debuff>())
