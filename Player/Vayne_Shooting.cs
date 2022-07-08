@@ -56,228 +56,64 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
 
     public void Shoot()
     {
+        List<int> denominator = new List<int>();
+        List<int> numerator = new List<int>();
+
         switch (numberOfProjectiles)
         {
             case 1:
-                GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                bullet.GetComponent<BulletBehavior>().damage = damage;
-                bullet.GetComponent<BulletBehavior>().isSilverBolt = true;
-                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-
-                //check if the next auto should be modified by tumble damage modifier
-                if (tumbleModifierShoot)
-                {
-                    bullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
-                    tumbleModifierShoot = false;
-                }
-                rb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
+                numerator.Add(0);
+                denominator.Add(1);
                 break;
-
             case 2:
-                for (int i = 0; i < numberOfProjectiles; i++)
-                {
-                    GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                    tempBullet.GetComponent<BulletBehavior>().damage = damage;
-                    tempBullet.GetComponent<BulletBehavior>().isSilverBolt = true;
-                    Rigidbody2D tempRb = tempBullet.GetComponent<Rigidbody2D>();
-
-                    Vector2 dir = aim.transform.rotation * Vector2.right;
-
-                    if (tumbleModifierShoot)
-                    {
-                        tempBullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
-                        tumbleModifierShoot = false;
-                    }
-                    switch (i)
-                    {
-                        case 0:
-                            Vector3 pdir = Vector2.Perpendicular(dir) * (projectileSpread / 2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 1:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / -2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                    }
-                }
+                numerator.AddRange(new List<int> { 1, 1 });
+                denominator.AddRange(new List<int> { 2, -2 });
                 break;
-
             case 3:
-                for (int i = 0; i < numberOfProjectiles; i++)
-                {
-                    GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                    tempBullet.GetComponent<BulletBehavior>().damage = damage;
-                    tempBullet.GetComponent<BulletBehavior>().isSilverBolt = true;
-                    Rigidbody2D tempRb = tempBullet.GetComponent<Rigidbody2D>();
-
-                    Vector2 dir = aim.transform.rotation * Vector2.right;
-
-                    if (tumbleModifierShoot)
-                    {
-                        tempBullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
-                        tumbleModifierShoot = false;
-                    }
-                    switch (i)
-                    {
-                        case 0:
-                            Vector3 pdir = Vector2.Perpendicular(dir) * (projectileSpread / 2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 1:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / -2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 2:
-                            //pdir = Vector2.Perpendicular(dir) * (projectileSpread / -2);
-                            tempRb.AddForce((firePoint.right) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                    }
-                }
+                numerator.AddRange(new List<int> { 1, 0, 1 });
+                denominator.AddRange(new List<int> { 2, 1, -2 });
                 break;
             case 4:
-                for (int i = 0; i < numberOfProjectiles; i++)
-                {
-                    GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                    tempBullet.GetComponent<BulletBehavior>().damage = damage;
-                    tempBullet.GetComponent<BulletBehavior>().isSilverBolt = true;
-                    Rigidbody2D tempRb = tempBullet.GetComponent<Rigidbody2D>();
-
-                    Vector2 dir = aim.transform.rotation * Vector2.right;
-
-                    if (tumbleModifierShoot)
-                    {
-                        tempBullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
-                        tumbleModifierShoot = false;
-                    }
-                    switch (i)
-                    {
-                        case 0:
-                            Vector3 pdir = Vector2.Perpendicular(dir) * (projectileSpread / 2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 1:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / 6 );
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 2:
-                            pdir = Vector2.Perpendicular(dir) * (-1 * projectileSpread / 6 );
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 3:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / -2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                    }
-                }
+                numerator.AddRange(new List<int> { 1, 1, 1, 1 });
+                denominator.AddRange(new List<int> { 2, 6, -6, -2 });
                 break;
             case 5:
-                for (int i = 0; i < numberOfProjectiles; i++)
-                {
-                    GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                    tempBullet.GetComponent<BulletBehavior>().damage = damage;
-                    tempBullet.GetComponent<BulletBehavior>().isSilverBolt = true;
-                    Rigidbody2D tempRb = tempBullet.GetComponent<Rigidbody2D>();
-
-                    Vector2 dir = aim.transform.rotation * Vector2.right;
-
-                    if (tumbleModifierShoot)
-                    {
-                        tempBullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
-                        tumbleModifierShoot = false;
-                    }
-                    switch (i)
-                    {
-                        case 0:
-                            Vector3 pdir = Vector2.Perpendicular(dir) * (projectileSpread / 2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 1:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / 4);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 2:
-                            //pdir = Vector2.Perpendicular(dir) * ((-1 * projectileSpread / 3) / 2);
-                            tempRb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 3:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / -4);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 4:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / -2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                    }
-                }
+                numerator.AddRange(new List<int> { 1, 1, 0, 1, 1 });
+                denominator.AddRange(new List<int> { 2, 4, 1, -4, -2 });
                 break;
             case 6:
-                for (int i = 0; i < numberOfProjectiles; i++)
-                {
-                    GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                    tempBullet.GetComponent<BulletBehavior>().damage = damage;
-                    tempBullet.GetComponent<BulletBehavior>().isSilverBolt = true;
-                    Rigidbody2D tempRb = tempBullet.GetComponent<Rigidbody2D>();
-
-                    Vector2 dir = aim.transform.rotation * Vector2.right;
-
-                    if (tumbleModifierShoot)
-                    {
-                        tempBullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
-                        tumbleModifierShoot = false;
-                    }
-                    switch (i)
-                    {
-                        case 0:
-                            Vector3 pdir = Vector2.Perpendicular(dir) * (projectileSpread / 2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 1:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / 10);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 2:
-                            pdir = Vector2.Perpendicular(dir) * (3* projectileSpread / 10);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 3:
-                            pdir = Vector2.Perpendicular(dir) * (3*projectileSpread / -10);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 4:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / -10);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                        case 5:
-                            pdir = Vector2.Perpendicular(dir) * (projectileSpread / -2);
-                            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
-                            break;
-                    }
-                }
+                numerator.AddRange(new List<int> { 1, 1, 3, 3, 1, 1 });
+                denominator.AddRange(new List<int> { 2, 10, 10, -10, -10, -2 });
                 break;
             default:
-                GameObject defaultbullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                defaultbullet.GetComponent<BulletBehavior>().damage = damage;
-                defaultbullet.GetComponent<BulletBehavior>().isSilverBolt = true;
-                Rigidbody2D defaultrb = defaultbullet.GetComponent<Rigidbody2D>();
-
-                //check if the next auto should be modified by tumble damage modifier
-                if (tumbleModifierShoot)
-                {
-                    defaultbullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
-                    tumbleModifierShoot = false;
-                }
-                defaultrb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
-
-                defaultrb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
+                numerator.Add(0);
+                denominator.Add(1);
                 break;
         }
 
+        if (denominator.Count != numberOfProjectiles)
+        {
+            throw new System.Exception("this is broken");
+        }
 
-        //rb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
-    
+        for(int i = 0; i < numberOfProjectiles; i++)
+        {
+            GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            tempBullet.GetComponent<BulletBehavior>().damage = damage;
+            tempBullet.GetComponent<BulletBehavior>().isSilverBolt = true;
+            Rigidbody2D tempRb = tempBullet.GetComponent<Rigidbody2D>();
 
+            Vector2 dir = aim.transform.rotation * Vector2.right;
 
+            if (tumbleModifierShoot)
+            {
+                tempBullet.GetComponent<BulletBehavior>().damage *= tumbleMultiplier;
+                tumbleModifierShoot = false;
+            }
 
+            Vector3 pdir = Vector2.Perpendicular(dir) * ((numerator[i] * projectileSpread) / denominator[i]);
+            tempRb.AddForce((firePoint.right + pdir) * bulletSpeed, ForceMode2D.Impulse);
+        }
         lastShootTime = Time.time;
     }
 
