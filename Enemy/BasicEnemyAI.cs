@@ -8,6 +8,7 @@ public class BasicEnemyAI : MonoBehaviour, IEnemy
     public GameObject xp;
 
     public float speed;
+    public float moveSpeedActive;
     public float health, maxHealth = 10;
 
     public float attackRadius;
@@ -28,14 +29,14 @@ public class BasicEnemyAI : MonoBehaviour, IEnemy
 
     private Collider2D col;
 
-    //private bool isInAttackRange;
-
     private List<Debuff> debuffs = new List<Debuff>();
 
     [SerializeField]
     private int silverBoltStacks = 0;
 
-    //private Vector3 startingPosition;
+    float IEnemy.moveSpeed { get => speed; set => speed = value; }
+    float IEnemy.moveSpeedActive { get => moveSpeedActive; set => moveSpeedActive = value; }
+
 
     private void Start()
     {
@@ -46,6 +47,7 @@ public class BasicEnemyAI : MonoBehaviour, IEnemy
         target = GameObject.FindWithTag("Player").transform;
         int targetHealth = target.GetComponent<Health>().health;
         col = GetComponent<Collider2D>();
+        moveSpeedActive = speed;
     }
 
     void Update()
@@ -73,31 +75,13 @@ public class BasicEnemyAI : MonoBehaviour, IEnemy
 
     private void FixedUpdate()
     {
-        /*
-        if (col.gameObject.tag == "XP")
-        {
-            Physics2D.IgnoreCollision(xp.GetComponent<Collider2D>(), col);
-        }
-        */
         HandleDebuffs();
-
-
         MoveCharacter(movement);
-        /*
-        if (!isInAttackRange)
-        {
-            MoveCharacter(movement);
-        }
-        else        
-        {
-            rb.velocity = Vector2.zero;
-        }
-        */
     }
 
     private void MoveCharacter(Vector2 dir)
     {
-        rb.MovePosition((Vector2)transform.position + (dir * speed * Time.deltaTime));
+        rb.MovePosition((Vector2)transform.position + (dir * moveSpeedActive * Time.deltaTime));
     }
 
     public void ContactDamage(int targetHealth)
@@ -120,16 +104,22 @@ public class BasicEnemyAI : MonoBehaviour, IEnemy
 
     public void AddDebuff(Debuff debuff)
     {
-        debuffs.Add(debuff);
+        if(debuff.GetType() == typeof(SilverBoltDebuff))
+        {
+            debuffs.Add(debuff);
+        }
+        else
+        {
+            if (!debuffs.Exists(x => x.GetType() == debuff.GetType()))
+            {
+                debuffs.Add(debuff);
+            }
+        }
     }
 
     private void HandleDebuffs()
     {
-        Debug.Log(silverBoltStacks);
-
-        //var tempList = debuffs;
-        //int count = 0;
-
+        //reverse iterating, finding counting and deleting silverbolt stacks
         foreach (Debuff item in debuffs.Reverse<Debuff>())
         {
             if (item.GetType() == typeof(SilverBoltDebuff))
@@ -137,13 +127,17 @@ public class BasicEnemyAI : MonoBehaviour, IEnemy
                 silverBoltStacks++;
                 debuffs.Remove(item);
             }
-            //count++;
         }
 
         if (silverBoltStacks == 3)
         {                        
             TakeDamage(maxHealth * (float)0.12);
             silverBoltStacks = 0;                      
+        }
+
+        foreach (Debuff debuff in debuffs)
+        {
+            debuff.Update();
         }
     }
 }

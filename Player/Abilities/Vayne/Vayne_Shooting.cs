@@ -26,9 +26,14 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
 
     private float lastShootTime = 0;
 
+    
+    public bool slowDebuff = false;
+
     [HideInInspector]
     public bool tumbleModifierShoot = false;
 
+    bool IShooting.slowDebuff { get => slowDebuff; set => slowDebuff = value; }
+    int IShooting.numProjectiles { get => numberOfProjectiles; set => numberOfProjectiles = value; }
     float IShooting.fireRate { get => fireRate; set => fireRate = value; }
     float IShooting.damage { get => damage; set => damage = value; }
 
@@ -101,6 +106,12 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
             GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             tempBullet.GetComponent<BulletBehavior>().damage = damage;
             tempBullet.GetComponent<BulletBehavior>().isSilverBolt = true;
+
+            if (slowDebuff)
+            {
+                tempBullet.GetComponent<BulletBehavior>().slowDebuff = true;
+            }
+
             Rigidbody2D tempRb = tempBullet.GetComponent<Rigidbody2D>();
 
             Vector2 dir = aim.transform.rotation * Vector2.right;

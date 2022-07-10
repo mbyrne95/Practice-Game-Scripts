@@ -8,6 +8,7 @@ public class BasicRangedEnemy : MonoBehaviour, IEnemy
     public GameObject xp;
 
     public float speed;
+    public float moveSpeedActive;
     public float health, maxHealth = 10;
 
     public float attackRadius;
@@ -42,14 +43,14 @@ public class BasicRangedEnemy : MonoBehaviour, IEnemy
     [SerializeField]
     private int silverBoltStacks = 0;
 
-    private float tempSpeed;
+    //private float tempSpeed;
 
+    float IEnemy.moveSpeed { get => speed; set => speed = value; }
+    float IEnemy.moveSpeedActive { get => moveSpeedActive; set => moveSpeedActive = value; }
 
-    //private Vector3 startingPosition;
 
     private void Start()
     {
-        //Physics2D.IgnoreLayerCollision();
         health = maxHealth;
         player = GameObject.FindWithTag("Player");
         rb = GetComponent<Rigidbody2D>();
@@ -57,7 +58,7 @@ public class BasicRangedEnemy : MonoBehaviour, IEnemy
         target = GameObject.FindWithTag("Player").transform;
         int targetHealth = target.GetComponent<Health>().health;
         col = GetComponent<Collider2D>();
-        tempSpeed = speed * (float)0.1;
+        moveSpeedActive = speed;
     }
 
     void Update()
@@ -84,16 +85,7 @@ public class BasicRangedEnemy : MonoBehaviour, IEnemy
 
     private void FixedUpdate()
     {
-        /*
-        if (col.gameObject.tag == "XP")
-        {
-            Physics2D.IgnoreCollision(xp.GetComponent<Collider2D>(), col);
-        }
-        */
-
         HandleDebuffs();
-
-
         MoveCharacter(movement);
     }
 
@@ -101,12 +93,13 @@ public class BasicRangedEnemy : MonoBehaviour, IEnemy
     {
         if (isInAttackRange)
         {
-            rb.MovePosition((Vector2)transform.position + (dir * tempSpeed * Time.deltaTime));
+            float shootSpeed = (float)0.1 * moveSpeedActive;
+            rb.MovePosition((Vector2)transform.position + (dir * shootSpeed * Time.deltaTime));
             Shoot();
         }
         else
         {
-            rb.MovePosition((Vector2)transform.position + (dir * speed * Time.deltaTime));
+            rb.MovePosition((Vector2)transform.position + (dir * moveSpeedActive * Time.deltaTime));
         }
     }
 
@@ -130,16 +123,22 @@ public class BasicRangedEnemy : MonoBehaviour, IEnemy
 
     public void AddDebuff(Debuff debuff)
     {
-        debuffs.Add(debuff);
+        if (debuff.GetType() == typeof(SilverBoltDebuff))
+        {
+            debuffs.Add(debuff);
+        }
+        else
+        {
+            if (!debuffs.Exists(x => x.GetType() == debuff.GetType()))
+            {
+                debuffs.Add(debuff);
+            }
+        }
     }
 
     private void HandleDebuffs()
     {
-        //Debug.Log(silverBoltStacks);
-
-        var tempList = debuffs;
-        //int count = 0;
-
+        //reverse iterating, finding counting and deleting silverbolt stacks
         foreach (Debuff item in debuffs.Reverse<Debuff>())
         {
             if (item.GetType() == typeof(SilverBoltDebuff))
@@ -147,13 +146,17 @@ public class BasicRangedEnemy : MonoBehaviour, IEnemy
                 silverBoltStacks++;
                 debuffs.Remove(item);
             }
-            //count++;
         }
 
         if (silverBoltStacks == 3)
         {
             TakeDamage(maxHealth * (float)0.12);
             silverBoltStacks = 0;
+        }
+
+        foreach (Debuff debuff in debuffs)
+        {
+            debuff.Update();
         }
     }
 
