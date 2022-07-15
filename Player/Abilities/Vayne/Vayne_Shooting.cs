@@ -9,6 +9,9 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
     public GameObject condemnPrefab;
     public GameObject aim;
 
+    [HideInInspector]
+    public List<int> numbers = new List<int>();
+
     [Range(1,6)]
     public int numberOfProjectiles = 1;
     [SerializeField]
@@ -32,6 +35,7 @@ public class Vayne_Shooting : MonoBehaviour, IShooting
     [HideInInspector]
     public bool tumbleModifierShoot = false;
 
+    //List<int> IShooting.numbers { get => numbers; set => numbers = value; }
     bool IShooting.slowDebuff { get => slowDebuff; set => slowDebuff = value; }
     int IShooting.numProjectiles { get => numberOfProjectiles; set => numberOfProjectiles = value; }
     float IShooting.fireRate { get => fireRate; set => fireRate = value; }
